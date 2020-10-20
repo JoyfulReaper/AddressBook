@@ -32,9 +32,16 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div style="border: 2px solid red" class="col-md-3" id="sideBar">
-               
-
+            <div class="col-md-3" id="sideBar">
+                <div class="text-center heading">
+                    <h2>Address Book</h2>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a asp-area="" asp-controller="Home" asp-action="Index" id="nav-route"
+                       class="list-group-item list-group-item-action bg-transparent">Home</a>
+                    <a asp-area="" asp-controller="Home" asp-action="Privacy" id="nav-route"
+                       class="list-group-item list-group-item-action bg-transparent">Privacy</a>
+                </div>
             </div>
             <div style="border: 2px solid black" class="col-md-9" id="mainContent">
                 @RenderBody()
