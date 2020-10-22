@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AddresMVC.Models
+namespace AddressBookMVC.Models
 {
     /*
     Add an interface to seperate or include in this class

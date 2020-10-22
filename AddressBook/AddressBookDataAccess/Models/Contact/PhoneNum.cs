@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AddresMVC.Models
+namespace AddressBookMVC.Models
 {
     public class PhoneNum
     {
