@@ -1,6 +1,5 @@
 using System;
-using System.Collections;
-
+using System.Collections.Generic;
 
 namespace AddresMVC.Models
 {
@@ -20,12 +19,12 @@ namespace AddresMVC.Models
         {
             get
             {
-                return $"{firstName} {lastName}";
+                return $"{FirstName} {LastName}";
             }
         }
-        public List<EmailAddress> EmailAddress { get; set; }
-        public List<MailAddress> MailAddress { get; set; }
-        public List<PhoneNumber> PhoneNumber { get; set; }
+        public List<Email> EmailAddress { get; set; }
+        public List<Address> MailAddress { get; set; }
+        public List<PhoneNum> PhoneNumber { get; set; }
         
     }
 }
