@@ -1,7 +1,8 @@
+using AddressBookDataAccess.Models.Contact;
 using System;
 using System.Collections.Generic;
 
-namespace AddressBookMVC.Models
+namespace AddressBookDataAccess.Models.People
 {
     /*
     Add an interface to seperate or include in this class
@@ -22,10 +23,10 @@ namespace AddressBookMVC.Models
                 return $"{FirstName} {LastName}";
             }
         }
-        public List<Email> EmailAddress { get; set; }
-        public List<Address> Address { get; set; }
-        public List<PhoneNum> PhoneNumber { get; set; }
-        
+        public List<Email> EmailAddresses { get; set; }
+        public List<Address> Addresses { get; set; }
+        public List<PhoneNum> PhoneNumbers { get; set; }
+
     }
 }
 
