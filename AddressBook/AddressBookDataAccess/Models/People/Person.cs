@@ -23,7 +23,7 @@ namespace AddresMVC.Models
             }
         }
         public List<Email> EmailAddress { get; set; }
-        public List<Address> MailAddress { get; set; }
+        public List<Address> Address { get; set; }
         public List<PhoneNum> PhoneNumber { get; set; }
         
     }

@@ -5,7 +5,8 @@ namespace AddresMVC.Models
 {
     public class Email
     {
-        public int Id { get; set; }        
+        public int Id { get; set; }  
+        public int PersonId { get; set; }      
         public string EmailAddress { get; set; }
     }
 }
