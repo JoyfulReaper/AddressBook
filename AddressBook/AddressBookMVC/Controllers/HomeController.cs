@@ -6,16 +6,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AddressBookMVC.ViewModels;
+using AddressBookDataAccess.DataAccess;
+using AddressBookDataAccess.Models.People;
 
 namespace AddressBookMVC.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IAddressRepository db;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IAddressRepository db)
         {
             _logger = logger;
+            this.db = db;
         }
 
         public IActionResult Index()
@@ -25,6 +29,16 @@ namespace AddressBookMVC.Controllers
 
         public IActionResult Privacy()
         {
+            /// Code for testing db operations. To be deleted in the future
+            var p = new Person
+            {
+                FirstName = "Guy",
+                LastName = "Dude"
+            };
+
+            db.CreatePerson(p);
+            var x = 1;
+
             return View();
         }
 
