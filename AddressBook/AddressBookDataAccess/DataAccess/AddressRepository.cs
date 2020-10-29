@@ -8,6 +8,7 @@ namespace AddressBookDataAccess.DataAccess
     public class AddressRepository : IAddressRepository
     {
         private readonly string connectionString;
+        private SqliteDataAccess db = new SqliteDataAccess();
 
         public AddressRepository(string connectionString)
         {
@@ -16,7 +17,12 @@ namespace AddressBookDataAccess.DataAccess
 
         public void CreatePerson(Person person)
         {
-            throw new NotImplementedException();
+            string sql = "insert into People (FirstName, LastName) values (@FirstName, @LastName);";
+
+            db.SaveData<dynamic>(
+                sql, 
+                new { FirstName =  person.FirstName, LastName = person.LastName },
+                connectionString);
         }
 
         public List<Person> GetPeople()
