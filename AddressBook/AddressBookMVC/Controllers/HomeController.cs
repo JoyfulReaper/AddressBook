@@ -42,7 +42,6 @@ namespace AddressBookMVC.Controllers
             db.GetPersonById(1);
             db.GetPeople();
 
-            //var x = 1;
 
             return View();
         }

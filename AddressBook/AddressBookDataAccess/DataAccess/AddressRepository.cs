@@ -36,7 +36,7 @@ namespace AddressBookDataAccess.DataAccess
             var people = db.LoadData<Person, dynamic>(
                 sql,
                 new { },
-                connectionString).ToList();
+                connectionString);
 
             // Call test method. Remove in the future.
             TestDb(people: people);
