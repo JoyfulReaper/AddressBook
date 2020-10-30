@@ -34,7 +34,7 @@ namespace AddressBookMVC.Controllers
             var p = new Person
             {
                 FirstName = "Guy",
-                LastName = "Dude",
+                LastName = "Dude"
             };
             db.CreatePerson(p);
 
