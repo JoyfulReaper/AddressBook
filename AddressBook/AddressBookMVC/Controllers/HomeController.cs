@@ -31,12 +31,12 @@ namespace AddressBookMVC.Controllers
         public IActionResult Privacy()
         {
             /// Code for testing db operations. To be deleted in the future
-            var p = new Person
-            {
-                FirstName = "Guy",
-                LastName = "Dude"
-            };
-            db.CreatePerson(p);
+            //var p = new Person
+            //{
+            //    FirstName = "Guy",
+            //    LastName = "Dude"
+            //};
+            //db.CreatePerson(p);
 
             // Code for testing db operations. To be deleted in the future.
             db.GetPersonById(1);
