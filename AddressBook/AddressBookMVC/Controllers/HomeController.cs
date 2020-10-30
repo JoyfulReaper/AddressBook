@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using AddressBookMVC.ViewModels;
 using AddressBookDataAccess.DataAccess;
 using AddressBookDataAccess.Models.People;
+using AddressBookDataAccess.Models.Contact;
 
 namespace AddressBookMVC.Controllers
 {
@@ -35,9 +36,13 @@ namespace AddressBookMVC.Controllers
                 FirstName = "Guy",
                 LastName = "Dude"
             };
-
             db.CreatePerson(p);
-            var x = 1;
+
+            // Code for testing db operations. To be deleted in the future.
+            db.GetPersonById(1);
+            db.GetPeople();
+
+            //var x = 1;
 
             return View();
         }
