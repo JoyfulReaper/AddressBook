@@ -27,7 +27,7 @@ namespace AddressBookMVC
             services.AddControllersWithViews();
 
             services.AddScoped<IAddressRepository>(r => new AddressRepository(
-                Configuration.GetConnectionString("AddressBook")
+                Configuration.GetConnectionString("AddressBook"), new SqliteDataAccess()
                 ));
         }
 

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace AddressBookDataAccess.DataAccess
 {
-    public class SqliteDataAccess
+    public class SqliteDataAccess : ISqliteDataAccess
     {
         public List<T> LoadData<T, U>(string sqlStatement, U parameters, string connectionString)
         {
