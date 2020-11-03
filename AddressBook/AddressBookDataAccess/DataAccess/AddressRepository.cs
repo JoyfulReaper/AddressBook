@@ -1,5 +1,6 @@
 ﻿using AddressBookDataAccess.Models.Contact;
 using AddressBookDataAccess.Models.People;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,13 +21,52 @@ namespace AddressBookDataAccess.DataAccess
 
         public void CreatePerson(Person person)
         {
-            string sql = "insert into People (FirstName, LastName) values (@FirstName, @LastName)";
+            try
+            {
+                db.StartTransaction(connectionString);
 
-            db.SaveData<dynamic>(
-                sql,
-                new { FirstName = person.FirstName, LastName = person.LastName },
-                connectionString);
+                string sql = "insert into People (FirstName, LastName) values (@FirstName, @LastName);"
+                + "select last_insert_rowid();";
 
+                int id = db.LoadDataInTransaction<int, dynamic>(
+                    sql,
+                    new { FirstName = person.FirstName, LastName = person.LastName })
+                    .FirstOrDefault();
+
+                // assign created person id to contact
+                person.EmailAddresses?.ForEach(e => e.PersonId = id);
+                person.Addresses?.ForEach(a => a.PersonId = id);
+                person.PhoneNumbers?.ForEach(p => p.PersonId = id);
+
+                sql = "insert into EmailAddresses (PersonId, EmailAddress) values (@PersonId, @EmailAddress);";
+
+                db.SaveDataInTransaction(
+                    sql,
+                    person.EmailAddresses);
+                    // passing list causes dapper to iterate over it automatically
+                    // however @params must match db cols for mapping purposes
+
+                sql = "insert into Addresses (, StreetAddress, City, Suburb, State, PostCode, IsMailAddress) values " +
+                    "(@PersonId, @StreetAddress, @City, @Suburb, @State, @PostCode, @IsMailAddress);";
+
+                db.SaveDataInTransaction(
+                    sql,
+                    person.Addresses);
+
+                sql = "insert into PhoneNumbers (PersonId, Number) values (@PersonId, @Number);";
+
+                db.SaveDataInTransaction(
+                    sql,
+                    person.PhoneNumbers);
+
+                db.CommitTransaction();
+            }
+            catch
+            {
+                db.RollbackTransaction();
+                throw;
+                // throw? See error handling in demo
+            }
         }
 
         public List<Person> GetPeople()

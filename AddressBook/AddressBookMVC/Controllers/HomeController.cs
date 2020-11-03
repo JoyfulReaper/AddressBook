@@ -31,16 +31,29 @@ namespace AddressBookMVC.Controllers
         public IActionResult Privacy()
         {
             /// Code for testing db operations. To be deleted in the future
-            //var p = new Person
-            //{
-            //    FirstName = "Guy",
-            //    LastName = "Dude"
-            //};
-            //db.CreatePerson(p);
+            var p = new Person
+            {
+                FirstName = "qst1",
+                LastName = "tvest4",
+                EmailAddresses = new List<Email>
+                {
+                    new Email { EmailAddress = "testval3" },
+                    new Email { EmailAddress = "testval4" }
+                },
+                Addresses = new List<Address>
+                {
+                    new Address{ StreetAddress = "st1", City = "cty1", Suburb = "sb1", State = "s1t", PostCode = "pc1", IsMailAddress = true}
+                },
+                PhoneNumbers = new List<PhoneNum>
+                {
+                    new PhoneNum { Number = 12345678 }
+                }
+            };
+            db.CreatePerson(p);
 
             // Code for testing db operations. To be deleted in the future.
-            db.GetPersonById(1);
-            db.GetPeople();
+            //db.GetPersonById(1);
+            //db.GetPeople();
 
 
             return View();

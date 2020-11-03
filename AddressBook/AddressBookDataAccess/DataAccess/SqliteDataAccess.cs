@@ -27,5 +27,69 @@ namespace AddressBookDataAccess.DataAccess
                 connection.Execute(sqlStatement, parameters);
             }
         }
+
+        // Transaction logic
+
+        private IDbConnection connection;
+        private IDbTransaction transaction;
+        private bool isClosed = false;
+
+        public void StartTransaction(string connectionString)
+        {
+            connection = new SQLiteConnection(connectionString);
+            connection.Open();
+            transaction = connection.BeginTransaction();
+
+            // keep track of open transaction
+            isClosed = false;
+        }
+
+        public void SaveDataInTransaction<T>(string sql, T parameters)
+        {
+            connection.Execute(sql, parameters, transaction: transaction);
+        }
+
+        public List<T> LoadDataInTransaction<T, U>(string sql, U parameters)
+        {
+            List<T> rows = connection.Query<T>(sql, parameters, transaction: transaction)
+                .ToList();
+                
+            return rows;
+        }
+
+        public void CommitTransaction()
+        {
+            transaction?.Commit();
+            connection?.Close();
+
+            isClosed = true;
+        }
+
+        public void RollbackTransaction()
+        {
+            transaction?.Rollback();
+            connection?.Close();
+
+            isClosed = true;
+        }
+
+        // this is called at the end of a 'using' statement involving this class
+        public void Dispose()
+        {
+            if (isClosed == false)
+            {
+                try
+                {
+                    CommitTransaction();
+                }
+                catch (Exception ex)
+                {
+                    // TODO: Log this                    
+                }
+            }
+
+            transaction = null;
+            connection = null;
+        }
     }
 }
