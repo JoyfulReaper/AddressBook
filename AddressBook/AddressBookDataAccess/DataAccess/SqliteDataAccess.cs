@@ -8,7 +8,7 @@ using System.Text;
 
 namespace AddressBookDataAccess.DataAccess
 {
-    public class SqliteDataAccess : ISqliteDataAccess
+    public class SqliteDataAccess : ISqliteDataAccess, IDisposable
     {
         public List<T> LoadData<T, U>(string sqlStatement, U parameters, string connectionString)
         {
@@ -44,14 +44,14 @@ namespace AddressBookDataAccess.DataAccess
             isClosed = false;
         }
 
-        public void SaveDataInTransaction<T>(string sql, T parameters)
+        public void SaveDataInTransaction<T>(string sqlStatement, T parameters)
         {
-            connection.Execute(sql, parameters, transaction: transaction);
+            connection.Execute(sqlStatement, parameters, transaction: transaction);
         }
 
-        public List<T> LoadDataInTransaction<T, U>(string sql, U parameters)
+        public List<T> LoadDataInTransaction<T, U>(string sqlStatement, U parameters)
         {
-            List<T> rows = connection.Query<T>(sql, parameters, transaction: transaction)
+            List<T> rows = connection.Query<T>(sqlStatement, parameters, transaction: transaction)
                 .ToList();
                 
             return rows;
