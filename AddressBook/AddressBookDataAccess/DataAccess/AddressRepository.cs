@@ -46,7 +46,7 @@ namespace AddressBookDataAccess.DataAccess
                     // passing list causes dapper to iterate over it automatically
                     // however @params must match db cols for mapping purposes
 
-                sql = "insert into Addresses (, StreetAddress, City, Suburb, State, PostCode, IsMailAddress) values " +
+                sql = "insert into Addresses (PersonId, StreetAddress, City, Suburb, State, PostCode, IsMailAddress) values " +
                     "(@PersonId, @StreetAddress, @City, @Suburb, @State, @PostCode, @IsMailAddress);";
 
                 db.SaveDataInTransaction(

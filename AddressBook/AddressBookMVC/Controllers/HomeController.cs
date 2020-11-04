@@ -33,8 +33,9 @@ namespace AddressBookMVC.Controllers
             /// Code for testing db operations. To be deleted in the future
             var p = new Person
             {
+                Id = 2,
                 FirstName = "qst1",
-                LastName = "tvest4",
+                //LastName = "feg",
                 EmailAddresses = new List<Email>
                 {
                     new Email { EmailAddress = "testval3" },
