@@ -28,43 +28,59 @@ namespace AddressBookDataAccess.DataAccess
                 string sql = "insert into People (FirstName, LastName) values (@FirstName, @LastName);"
                 + "select last_insert_rowid();";
 
+                if (string.IsNullOrWhiteSpace(person.FirstName) || string.IsNullOrWhiteSpace(person.LastName))
+                {
+                    throw new ArgumentException("Non nullable property of person was not properly set.");
+                }
+
                 int id = db.LoadDataInTransaction<int, dynamic>(
                     sql,
                     new { FirstName = person.FirstName, LastName = person.LastName })
                     .FirstOrDefault();
 
-                // assign created person id to contact
-                person.EmailAddresses?.ForEach(e => e.PersonId = id);
-                person.Addresses?.ForEach(a => a.PersonId = id);
-                person.PhoneNumbers?.ForEach(p => p.PersonId = id);
+                if (person.EmailAddresses.Count > 0)
+                {
+                    person.EmailAddresses.ForEach(e => e.PersonId = id);
 
-                sql = "insert into EmailAddresses (PersonId, EmailAddress) values (@PersonId, @EmailAddress);";
+                    sql = "insert into EmailAddresses (PersonId, EmailAddress) values (@PersonId, @EmailAddress);";
 
-                db.SaveDataInTransaction(
-                    sql,
-                    person.EmailAddresses);
+                    db.SaveDataInTransaction(
+                        sql,
+                        person.EmailAddresses);
                     // passing list causes dapper to iterate over it automatically
                     // however @params must match db cols for mapping purposes
+                }
 
-                sql = "insert into Addresses (PersonId, StreetAddress, City, Suburb, State, PostCode, IsMailAddress) values " +
+                if (person.Addresses.Count > 0)
+                {
+                    person.Addresses.ForEach(a => a.PersonId = id);
+
+                    sql = "insert into Addresses (PersonId, StreetAddress, City, Suburb, State, PostCode, IsMailAddress) values " +
                     "(@PersonId, @StreetAddress, @City, @Suburb, @State, @PostCode, @IsMailAddress);";
 
-                db.SaveDataInTransaction(
-                    sql,
-                    person.Addresses);
+                    db.SaveDataInTransaction(
+                        sql,
+                        person.Addresses);
+                }
 
-                sql = "insert into PhoneNumbers (PersonId, Number) values (@PersonId, @Number);";
+                if (person.PhoneNumbers.Count > 0)
+                {
+                    person.PhoneNumbers.ForEach(p => p.PersonId = id);
 
-                db.SaveDataInTransaction(
-                    sql,
-                    person.PhoneNumbers);
+                    sql = "insert into PhoneNumbers (PersonId, Number) values (@PersonId, @Number);";
+
+                    db.SaveDataInTransaction(
+                        sql,
+                        person.PhoneNumbers);
+                }
+
 
                 db.CommitTransaction();
             }
-            catch
+            catch (Exception e)
             {
                 db.RollbackTransaction();
-                throw;
+                throw e;
                 // throw? See error handling in demo
             }
         }

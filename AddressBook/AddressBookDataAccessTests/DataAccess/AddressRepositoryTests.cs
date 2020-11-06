@@ -20,7 +20,7 @@ namespace AddressBookDataAccessTests.DataAccess
         private AddressRepository repo;
 
         // const sql queries
-        const string sql = "insert into People (FirstName, LastName) values (@FirstName, @LastName);"
+        const string sqlPerson = "insert into People (FirstName, LastName) values (@FirstName, @LastName);"
                 + "select last_insert_rowid();";
         const string sqlPhone = "insert into PhoneNumbers (PersonId, Number) values (@PersonId, @Number);";
         const string sqlAddress = "insert into Addresses (PersonId, StreetAddress, City, Suburb, State, PostCode, IsMailAddress) values " +
@@ -88,43 +88,27 @@ namespace AddressBookDataAccessTests.DataAccess
         #endregion
 
         #region CreatePerson tests
-        [Fact]
-        public void CreatePerson_StartTransactionCalledOnce()
-        {
-            var p = GetListOfSamplePeople()[3];
+        
+        [Theory]
+        [ClassData(typeof(TestData_PeopleWithInvalidNames))]
+        // Tests person with pure whitespace, and one that is null, and one that is empty
+        public void CreatePerson_PersonLackingNonNullablePropCausesRollback(Person p)
+        {            
             var list = new List<int> { p.Id };
-            string sql = "insert into People (FirstName, LastName) values (@FirstName, @LastName);"
-                + "select last_insert_rowid();";
 
             db.Setup(x => x.LoadDataInTransaction<int, dynamic>
-                (sql, It.IsAny<object>()))
+                (sqlPerson, It.IsAny<object>()))
                 .Returns(list);
-            repo.CreatePerson(p);
-
-            db.Verify(x => x.StartTransaction(conStr), Times.Once());
-        }
-
-        [Fact]
-        public void CreatePerson_PersonLackingNonNullablePropCausesRollback()
-        {
-            var p = SamplePeople()["PersonWithNulledProp"];
-            var list = new List<int> { p.Id };
-            string sql = "insert into People (FirstName, LastName) values (@FirstName, @LastName);"
-                + "select last_insert_rowid();";
-
-            db.Setup(x => x.LoadDataInTransaction<int, dynamic>
-                (sql, It.IsAny<object>()))
-                .Returns(list);
-            repo.CreatePerson(p);
-
-            // Test fails even though person has a null LastName
+            
             Assert.Throws<ArgumentException>(() => repo.CreatePerson(p));
-            db.Verify(x => x.StartTransaction(conStr), Times.Once());
-            db.Verify(x => x.LoadDataInTransaction<Person, dynamic>(sql, p), Times.Once());
-            db.Verify(x => x.SaveDataInTransaction<Person>(sql, p), Times.Never());
-            // Commit should fail, but it passes
+
+            db.Verify(x => x.StartTransaction(conStr), Times.Once());            
+            db.Verify(x => x.RollbackTransaction(), Times.Once());
+
+            db.Verify(x => x.LoadDataInTransaction<int, dynamic>(sqlPerson, p), Times.Never());
+            // It.IsAny used for Save since all 3 calls should not be called
+            db.Verify(x => x.SaveDataInTransaction<dynamic>(It.IsAny<string>(), p), Times.Never());
             db.Verify(x => x.CommitTransaction(), Times.Never());
-            db.Verify(x => x.RollbackTransaction(), Times.Never());
         }
 
         [Fact]
@@ -132,83 +116,84 @@ namespace AddressBookDataAccessTests.DataAccess
         {
             var p = SamplePeople()["PersonWithNoContactList"];
             var list = new List<int> { p.Id };
-
-            string sql = "insert into People (FirstName, LastName) values (@FirstName, @LastName);"
-                + "select last_insert_rowid();";
+           
             db.Setup(x => x.LoadDataInTransaction<int, dynamic>
-                (sql, It.IsAny<object>()))
+                (sqlPerson, It.IsAny<object>()))
                 .Returns(list);
+            
             repo.CreatePerson(p);
 
-            db.Verify(x => x.StartTransaction(conStr), Times.Once());
-            // Load and SaveData are not called
-            db.Verify(x => x.SaveDataInTransaction<Person>(sql, p), Times.Once());
-            db.Verify(x => x.LoadDataInTransaction<int, dynamic>(sql, It.IsAny<object>()), Times.Once());
-            
+            db.Verify(x => x.StartTransaction(conStr), Times.Once());            
+            db.Verify(x => x.LoadDataInTransaction<int, dynamic>(sqlPerson, It.IsAny<object>()), Times.Once());            
             db.Verify(x => x.CommitTransaction(), Times.Once());
+
+            db.Verify(x => x.SaveDataInTransaction<dynamic>(It.IsAny<string>(), p), Times.Never());
             db.Verify(x => x.RollbackTransaction(), Times.Never());
         }
 
         [Fact]
         public void CreatePerson_SavePersonWithOneContactList()
         {
-            var p = SamplePeople()["PersonWithOneContactList"];
+            var p = SamplePeople()["PersonWithPhoneList"];
             var list = new List<int> { p.Id };
 
             db.Setup(x => x.LoadDataInTransaction<int, dynamic>
-                (sql, It.IsAny<object>()))
+                (sqlPerson, It.IsAny<object>()))
                 .Returns(list);
+            
             repo.CreatePerson(p);
 
             db.Verify(x => x.StartTransaction(conStr), Times.Once());
-            db.Verify(x => x.LoadDataInTransaction<int, dynamic>(sql, It.IsAny<object>()), Times.Once());
-            db.Verify(x => x.SaveDataInTransaction<dynamic>(sqlPhone, It.IsAny<object>()), Times.Once());
-            // Expect address & email to run 0 times, both ran once
+            db.Verify(x => x.LoadDataInTransaction<int, dynamic>(sqlPerson, It.IsAny<object>()), Times.Once());
+            db.Verify(x => x.SaveDataInTransaction<dynamic>(sqlPhone, It.IsAny<object>()), Times.Once());            
+            db.Verify(x => x.CommitTransaction(), Times.Once());
+
             db.Verify(x => x.SaveDataInTransaction<dynamic>(sqlAddress, It.IsAny<object>()), Times.Never());
             db.Verify(x => x.SaveDataInTransaction<dynamic>(sqlEmail, It.IsAny<object>()), Times.Never());
-            db.Verify(x => x.CommitTransaction(), Times.Once());
             db.Verify(x => x.RollbackTransaction(), Times.Never());
         }
 
         [Fact]
         public void CreatePerson_SavePersonWithTwoContactLists()
         {
-            var p = SamplePeople()["PersonWithTwoContactLists"];
+            var p = SamplePeople()["PersonWithPhoneEmailList"];
             var list = new List<int> { p.Id };
 
             db.Setup(x => x.LoadDataInTransaction<int, dynamic>
-                (sql, It.IsAny<object>()))
+                (sqlPerson, It.IsAny<object>()))
                 .Returns(list);
             
             repo.CreatePerson(p);
 
             db.Verify(x => x.StartTransaction(conStr), Times.Once());
-            db.Verify(x => x.LoadDataInTransaction<int, dynamic>(sql, It.IsAny<object>()), Times.Once());
+            db.Verify(x => x.LoadDataInTransaction<int, dynamic>(sqlPerson, It.IsAny<object>()), Times.Once());
             db.Verify(x => x.SaveDataInTransaction<dynamic>(sqlEmail, It.IsAny<object>()), Times.Once());
             db.Verify(x => x.SaveDataInTransaction<dynamic>(sqlPhone, It.IsAny<object>()), Times.Once());
-            // Shouldn't be called
-            db.Verify(x => x.SaveDataInTransaction<dynamic>(sqlAddress, It.IsAny<object>()), Times.Never());
             db.Verify(x => x.CommitTransaction(), Times.Once());
+
             db.Verify(x => x.RollbackTransaction(), Times.Never());
+            db.Verify(x => x.SaveDataInTransaction<dynamic>(sqlAddress, It.IsAny<object>()), Times.Never());
         }
 
         [Fact]
         public void CreatePerson_SavePersonWithAllContactLists()
         {
-            var p = SamplePeople()["PersonWithFullContactLists"];
+            var p = SamplePeople()["PersonWithAddressEmailPhoneNumList"];
             var list = new List<int> { p.Id };
 
             db.Setup(x => x.LoadDataInTransaction<int, dynamic>
-                (sql, It.IsAny<object>()))
+                (sqlPerson, It.IsAny<object>()))
                 .Returns(list);
+
             repo.CreatePerson(p);
 
             db.Verify(x => x.StartTransaction(conStr), Times.Once());
-            db.Verify(x => x.LoadDataInTransaction<int, dynamic>(sql, It.IsAny<object>()), Times.Once());
+            db.Verify(x => x.LoadDataInTransaction<int, dynamic>(sqlPerson, It.IsAny<object>()), Times.Once());
             db.Verify(x => x.SaveDataInTransaction<dynamic>(sqlEmail, It.IsAny<object>()), Times.Once());
             db.Verify(x => x.SaveDataInTransaction<dynamic>(sqlPhone, It.IsAny<object>()), Times.Once());
             db.Verify(x => x.SaveDataInTransaction<dynamic>(sqlAddress, It.IsAny<object>()), Times.Once());
             db.Verify(x => x.CommitTransaction(), Times.Once());
+
             db.Verify(x => x.RollbackTransaction(), Times.Never());
         }
         #endregion
@@ -243,11 +228,6 @@ namespace AddressBookDataAccessTests.DataAccess
                 {
                     FirstName = "Van",
                     LastName = "Williams"
-                },
-                new Person
-                {
-                    FirstName = "Bob",
-                    LastName = null
                 }
             };
         }
@@ -257,15 +237,13 @@ namespace AddressBookDataAccessTests.DataAccess
             return new Dictionary<string, Person>
             {
                 // person with full contact lists
-                { "PersonWithFullContactLists", GetListOfSamplePeople()[0] },
+                { "PersonWithAddressEmailPhoneNumList", GetListOfSamplePeople()[0] },
                 // person with 2 contact lists
-                { "PersonWithTwoContactLists", GetListOfSamplePeople()[1] },
+                { "PersonWithPhoneEmailList", GetListOfSamplePeople()[1] },
                 // person with 1 contact list
-                { "PersonWithOneContactList", GetListOfSamplePeople()[2] },
+                { "PersonWithPhoneList", GetListOfSamplePeople()[2] },
                 // person with no contact lists
-                { "PersonWithNoContactList", GetListOfSamplePeople()[3] },
-                // person with non nullable prop set to null
-                { "PersonWithNulledProp", GetListOfSamplePeople()[4] }
+                { "PersonWithNoContactList", GetListOfSamplePeople()[3] }                
             };
         }
         #endregion

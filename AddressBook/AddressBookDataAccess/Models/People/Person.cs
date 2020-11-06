@@ -23,9 +23,9 @@ namespace AddressBookDataAccess.Models.People
                 return $"{FirstName} {LastName}";
             }
         }
-        public List<Email> EmailAddresses { get; set; }
-        public List<Address> Addresses { get; set; }
-        public List<PhoneNum> PhoneNumbers { get; set; }
+        public List<Email> EmailAddresses { get; set; } = new List<Email>();
+        public List<Address> Addresses { get; set; } = new List<Address>();
+        public List<PhoneNum> PhoneNumbers { get; set; } = new List<PhoneNum>();
 
     }
 }
