@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\Contact\" />
-    <Folder Include="ViewModels\People\" />
+    <Folder Include="Models\Contact\" />
+    <Folder Include="Models\People\" />
   </ItemGroup>
 
 </Project>
