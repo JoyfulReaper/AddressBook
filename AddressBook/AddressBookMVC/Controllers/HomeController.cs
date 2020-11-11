@@ -15,12 +15,10 @@ namespace AddressBookMVC.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IAddressRepository db;
 
-        public HomeController(ILogger<HomeController> logger, IAddressRepository db)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            this.db = db;
         }
 
         public IActionResult Index()
@@ -29,10 +27,11 @@ namespace AddressBookMVC.Controllers
         }
 
         public IActionResult Privacy()
-        {
-           
+        {           
             return View();
         }
+
+        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

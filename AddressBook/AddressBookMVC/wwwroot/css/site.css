@@ -100,3 +100,18 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+/* Styling for Contact views */
+#personButtons {
+    margin: 5px 5px 5px 5px;
+}
+
+.removeLinkStyling {
+    color: black;
+    text-decoration: none;
+}
+
+.removeLinkStyling:hover {
+    color: inherit;
+    text-decoration: inherit;
+}
