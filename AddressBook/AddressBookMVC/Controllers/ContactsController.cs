@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AddressBookDataAccess.DataAccess;
 using AddressBookDataAccess.Models.People;
+using AddressBookMVC.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AddressBookMVC.Controllers
@@ -40,6 +41,20 @@ namespace AddressBookMVC.Controllers
             }
 
             return View(personDetails);
+        }
+
+        
+        public IActionResult Create()
+        {
+            PersonSubmitViewModel personSubmitVM = new PersonSubmitViewModel();
+            return View(personSubmitVM);
+        }
+
+        [ActionName("CreatePerson")]
+        public IActionResult Create(Person person)
+        {
+            db.CreatePerson(person);
+            return RedirectToAction("Index");
         }
     }
 }

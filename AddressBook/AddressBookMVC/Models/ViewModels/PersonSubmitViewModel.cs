@@ -10,10 +10,10 @@ namespace AddressBookMVC.Models.ViewModels
 {
     public class PersonSubmitViewModel
     {
-        public int PersonId { get; set; }
-        public int EmailId { get; set; }
-        public int AddressId { get; set; }
-        public int PhoneNumberId { get; set; }
+        //public int PersonId { get; set; }
+        //public int EmailId { get; set; }
+        //public int AddressId { get; set; }
+        //public int PhoneNumberId { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]
