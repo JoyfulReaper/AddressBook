@@ -3,11 +3,6 @@ using System.Collections.Generic;
 
 namespace AddressBookDataAccess.Models.Contact
 {
-    /*
-    Add bool checker for address. 'IsMailAddress'
-    this will check if whether the address is also the person's mail address
-    */
-
     public class Address
     {
         public int Id { get; set; }
@@ -18,5 +13,6 @@ namespace AddressBookDataAccess.Models.Contact
         public string State { get; set; }
         public string PostCode { get; set; }
         public bool IsMailAddress { get; set; }
+        public bool IsPrimary { get; set; }
     }
 }
