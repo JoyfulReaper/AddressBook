@@ -18,11 +18,11 @@ namespace AddressBookMVC.Models.ViewModels
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
-        [Required]
+        [MinimumElements(1)]
         public List<Email> EmailAddresses { get; set; }
-        [Required]
+        [MinimumElements(1)]
         public List<Address> Addresses { get; set; }
-        [Required]
+        [MinimumElements(1)]
         public List<PhoneNum> PhoneNumbers { get; set; }
     }
 }
