@@ -1,41 +1,94 @@
-﻿@model AddressBookDataAccess.Models.People.Person
+﻿@model AddressBookMVC.Models.ViewModels.PersonDetailViewModel
 
 @{
     ViewData["Title"] = "PersonDetail";
 }
 
-<h1>PersonDetail</h1>
+<h1>@Model.FullName</h1>
 
-<div>
-    <h4>Person</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FullName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FullName)
-        </dd>
-    </dl>
+<div class="col-sm-12">
+    <div class="detailsSection">
+        <h4 class="botBorder">Personal Details</h4>
+        <div class="field">
+            <p class="labelContent">
+                @Html.DisplayNameFor(model => model.FirstName)
+            </p>
+            <p class="personContent">
+                @Html.DisplayFor(model => model.FirstName)
+            </p>
+        </div>
+        <div class="field">
+            <p class="labelContent">
+                @Html.DisplayNameFor(model => model.LastName)
+            </p>
+            <p class="personContent">
+                @Html.DisplayFor(model => model.LastName)
+            </p>
+        </div>
+        <div class="field">
+            <p class="labelContent">
+                Placeholder
+            </p>
+            <p class="personContent">
+                Placeholder
+            </p>
+        </div>
+        <div class="field">
+            <p class="labelContent">
+                Placeholder
+            </p>
+            <p class="personContent">
+                Placeholder
+            </p>
+        </div>
+    </div>
+    <div class="detailsSection">
+        <h4 class="botBorder">@Html.DisplayNameFor(model => model.Addresses)</h4>
+        @for (int i = 0; i < Model.Addresses.Count; i++)
+        {
+            <div class="field">
+                <p class="labelContent">
+                    Address @(i + 1):
+                </p>
+                <p class="personContent">
+                    @Model.Addresses[i].FullAddress
+                </p>
+            </div>
+        }
+    </div>
+    <div class="detailsSection">
+        <h4 class="botBorder">@Html.DisplayNameFor(model => model.EmailAddresses)</h4>
+        @for (int i = 0; i < Model.EmailAddresses.Count; i++)
+        {
+            <div class="field">
+                <p class="labelContent">
+                    Email @(i + 1):
+                </p>
+                <p class="personContent">
+                    @Model.EmailAddresses[i].EmailAddress
+                </p>
+            </div>
+        }
+    </div>
+    <div class="detailsSection botBorder">
+        <h4 class="botBorder">@Html.DisplayNameFor(model => model.PhoneNumbers)</h4>
+        @for (int i = 0; i < Model.PhoneNumbers.Count; i++)
+        {
+            <div class="field">
+                <p class="labelContent">
+                    Phone Number @(i + 1):
+                </p>
+                <p class="personContent">
+                    @Model.PhoneNumbers[i].Number
+                </p>
+            </div>
+        }
+    </div>
 </div>
+
+<br />
+
+
 <div>
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
     <a asp-action="Index">Back to List</a>

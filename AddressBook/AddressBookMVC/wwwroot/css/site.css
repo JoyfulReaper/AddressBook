@@ -115,3 +115,40 @@ body {
     color: inherit;
     text-decoration: inherit;
 }
+
+.detailsSection {
+    border-top: 2px solid #f2f2f2;
+    border-left: 2px solid #f2f2f2;
+    border-right: 2px solid #f2f2f2;
+}
+
+.field {
+    overflow: hidden;
+    margin-top: 0px;
+}
+
+.labelContent {
+    float: left;
+    width: 28%;
+    padding: 0px 1% 0px 1%;
+    margin: 0px 0px 0px 10px;
+    text-align: right;
+    line-height: 20px;
+    font-weight: normal;
+    font-size: 15px;
+    color: #999;
+    border-right: 2px solid #f2f2f2;
+}
+
+.botBorder {
+    margin-bottom: 0px;
+    border-bottom: 2px solid #f2f2f2;
+}
+
+.personContent {
+    font-size: 15px;
+    margin-bottom: 0px;
+    margin-left: 30%;
+    padding: 0px 4px 0px 8px;
+    line-height: 20px;
+}

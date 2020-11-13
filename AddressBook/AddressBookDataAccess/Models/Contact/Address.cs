@@ -14,5 +14,12 @@ namespace AddressBookDataAccess.Models.Contact
         public string PostCode { get; set; }
         public bool IsMailAddress { get; set; }
         public bool IsPrimary { get; set; }
+        public string FullAddress 
+        {
+            get
+            {
+                return $"{StreetAddress}, {Suburb} {PostCode}, {City}, {State}";
+            }
+        }
     }
 }
