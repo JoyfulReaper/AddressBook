@@ -63,10 +63,11 @@
                 async: true,
                 data: $('#form').serialize(),
                 type: "POST",
-                url: 'Contacts/AddEmailAddress',
+                url: "@Url.Action("AddEmailAddress", "Contacts")",
                 success: function (partialView) {
-                    console.log("partialView: " + partialView);
-                    $('#emailsContainer').html(partialView);
+                    console.log("partialView: " + partialView);                    
+                    const $fields = $('#emailsContainer');
+                    $(partialView).appendTo($fields);
                 }
             });
         });

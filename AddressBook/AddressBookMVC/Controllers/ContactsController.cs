@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AddressBookDataAccess.DataAccess;
+using AddressBookDataAccess.Models.Contact;
 using AddressBookDataAccess.Models.People;
 using AddressBookMVC.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
