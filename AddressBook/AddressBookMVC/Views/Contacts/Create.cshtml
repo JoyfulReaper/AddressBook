@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreatePerson">
+        <form asp-action="CreatePerson" id="form">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
@@ -22,12 +22,32 @@
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
+            <div id="emailsContainer">
+                @*<label asp-for="EmailAddresses" class="control-label"></label>
+                <input asp-for="EmailAddresses" class="form-control" />
+                <span asp-validation-for="EmailAddresses" class="text-danger"></span>*@
+
+                @*NOTE: This will cause the program to break on Create()*@
+                @Html.EditorFor(model=>model.EmailAddresses)
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <input class="btn btn-default" type="button" id="btnAdd" value="Add E-mail Address" />
+                </div>
+                @*<div class="col-md-2">
+                    <input type="submit" value="AddEmailAddress" id="submit" class="btn btn-default" />
+                </div>*@
+            </div>
+
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="CreatePerson" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
+
+
+
 
 
 <div>
@@ -36,4 +56,19 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $('#btnAdd').click(function () {
+            $.ajax({
+                async: true,
+                data: $('#form').serialize(),
+                type: "POST",
+                url: 'Contacts/AddEmailAddress',
+                success: function (partialView) {
+                    console.log("partialView: " + partialView);
+                    $('#emailsContainer').html(partialView);
+                }
+            });
+        });
+    </script>
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,10 +20,19 @@ namespace AddressBookMVC.Models.ViewModels
         [Required]
         public string LastName { get; set; }
         [MinimumElements(1)]
+        [DataType(DataType.EmailAddress)]
+        [DisplayName("Email Address")]
         public List<Email> EmailAddresses { get; set; }
         [MinimumElements(1)]
         public List<Address> Addresses { get; set; }
         [MinimumElements(1)]
         public List<PhoneNum> PhoneNumbers { get; set; }
+        
+        public virtual Email Emails { get; set; }
+
+        public PersonSubmitViewModel()
+        {
+            EmailAddresses = new List<Email>();
+        }
     }
 }

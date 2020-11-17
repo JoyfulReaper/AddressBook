@@ -51,10 +51,27 @@ namespace AddressBookMVC.Controllers
         }
 
         [ActionName("CreatePerson")]
-        public IActionResult Create(Person person)
+        public IActionResult Create([Bind("EmailAddresses")] Person person)
         {
+            //Person tempPerson = new Person()
+            //{
+            //    FirstName = person.FirstName,
+            //    LastName = person.LastName,
+            //    EmailAddresses = person.EmailAddresses
+            //};
+
             db.CreatePerson(person);
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        // Binding an email to our person and returning our partial view
+        public async Task<IActionResult> AddEmailAddress([Bind("EmailAddresses")] PersonSubmitViewModel person)
+        {
+            person.EmailAddresses.Add(new Email());
+            return PartialView("EmailAddresses", person);
+        }
+
+        
     }
 }
