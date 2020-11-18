@@ -44,21 +44,18 @@ namespace AddressBookMVC.Controllers
 
             return View(personDetails);
         }
-
-        
-        public IActionResult Create()
-        {
-            PersonSubmitViewModel personSubmitVM = new PersonSubmitViewModel();
-            personSubmitVM.EmailAddresses.Add(new EmailViewModel());
-            return View(personSubmitVM);
-        }
-
         public IActionResult Test()
         {
             PersonSubmitViewModel personSubmitVM = new PersonSubmitViewModel();
             return View(personSubmitVM);
         }
 
+        public IActionResult Create()
+        {
+            PersonSubmitViewModel personSubmitVM = new PersonSubmitViewModel();
+            personSubmitVM.EmailAddresses.Add(new EmailViewModel());
+            return View(personSubmitVM);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
