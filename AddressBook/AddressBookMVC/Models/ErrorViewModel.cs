@@ -1,6 +1,6 @@
 using System;
 
-namespace AddressBookMVC.ViewModels
+namespace AddressBookMVC.Models
 {
     public class ErrorViewModel
     {

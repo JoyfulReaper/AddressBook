@@ -1,4 +1,5 @@
 ﻿using AddressBookDataAccess.Models.Contact;
+using AddressBookMVC.Models.Contact;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using System;
 using System.Collections.Generic;
@@ -11,28 +12,12 @@ namespace AddressBookMVC.Models.ViewModels
 {
     public class PersonSubmitViewModel
     {
-        //public int PersonId { get; set; }
-        //public int EmailId { get; set; }
-        //public int AddressId { get; set; }
-        //public int PhoneNumberId { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
-        [MinimumElements(1)]
-        [DataType(DataType.EmailAddress)]
-        [DisplayName("Email Address")]
-        public List<Email> EmailAddresses { get; set; }
-        [MinimumElements(1)]
-        public List<Address> Addresses { get; set; }
-        [MinimumElements(1)]
-        public List<PhoneNum> PhoneNumbers { get; set; }
-        
-        public virtual Email Emails { get; set; }
 
-        public PersonSubmitViewModel()
-        {
-            EmailAddresses = new List<Email>();
-        }
+        [DisplayName("Email Addresses")]
+        public List<EmailViewModel> EmailAddresses { get; set; } = new List<EmailViewModel>();
     }
 }
