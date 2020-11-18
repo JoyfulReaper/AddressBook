@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreatePerson">
+        <form asp-action="CreatePerson" id="form">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
@@ -22,13 +22,22 @@
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
+            <div id="emailsContainer">
+                @Html.EditorFor(model => model.EmailAddresses, new { @class = "form-control" })
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <input class="btn btn-default" type="button" id="btnAdd" value="Add E-mail Address" />
+                </div>
+            </div>
+
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="CreatePerson" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
-
 
 <div>
     <a asp-action="Index">Back to List</a>
@@ -36,4 +45,19 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $('#btnAdd').click(function () {
+            $.ajax({
+                async: true,
+                data: $('#form').serialize(),
+                type: "POST",
+                url: "@Url.Action("AddEmailAddress", "Contacts")",
+                success: function (partialView) {
+                    console.log("partialView: " + partialView);
+                    $('#emailsContainer').html(partialView);
+                }
+            });
+        });
+    </script>
 }

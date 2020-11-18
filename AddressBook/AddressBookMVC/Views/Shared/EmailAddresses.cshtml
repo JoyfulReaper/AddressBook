@@ -1,0 +1,3 @@
+﻿@model AddressBookMVC.Models.ViewModels.PersonSubmitViewModel
+@Html.EditorFor(model => model.EmailAddresses, new { @class = "form-control" })
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
