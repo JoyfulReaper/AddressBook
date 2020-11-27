@@ -18,5 +18,9 @@ namespace AddressBookMVC.Models.ViewModels
         public string LastName { get; set; }
         [DisplayName("Email Addresses")]
         public List<EmailViewModel> EmailAddresses { get; set; } = new List<EmailViewModel>();
+        [DisplayName("Phone Number")]
+        public List<PhoneNumViewModel> PhoneNumbers { get; set; } = new List<PhoneNumViewModel>();
+        [DisplayName("Address")]
+        public List<AddressViewModel> Addresses { get; set; } = new List<AddressViewModel>();
     }
 }

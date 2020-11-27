@@ -88,20 +88,26 @@ namespace AddressBookMVC.Controllers
         {
             PersonSubmitViewModel personSubmitVM = new PersonSubmitViewModel();
             personSubmitVM.EmailAddresses.Add(new EmailViewModel());
+            personSubmitVM.PhoneNumbers.Add(new PhoneNumViewModel());
+            personSubmitVM.Addresses.Add(new AddressViewModel());
             return View(personSubmitVM);
         }
 
        
 
         [ActionName("CreatePerson")]
-        public IActionResult Create([Bind("FirstName, LastName, EmailAddresses")] PersonSubmitViewModel person)
+        public IActionResult Create([Bind("FirstName, LastName, EmailAddresses, PhoneNumbers, Addresses")] PersonSubmitViewModel person)
         {
             Person tempPerson = new Person()
             {
                 FirstName = person.FirstName,
                 LastName = person.LastName,
                 EmailAddresses = person.EmailAddresses
-                    .Select(e => new Email { EmailAddress = e.Email}).ToList() // to be refactored
+                    .Select(e => new Email { EmailAddress = e.Email}).ToList(), // to be refactored
+                PhoneNumbers = person.PhoneNumbers
+                .Select(e => new PhoneNum { Number = e.Number}).ToList(),
+                Addresses = person.Addresses
+                .Select(e => new Address { StreetAddress = e.StreetAddress }).ToList()
             };
 
             db.CreatePerson(tempPerson);
@@ -116,6 +122,20 @@ namespace AddressBookMVC.Controllers
             return PartialView("EmailAddresses", person);
         }
 
-        
+        [HttpPost]
+        // Binding a Phone Num to our person and returning our partial view
+        public async Task<IActionResult> AddPhoneNumber([Bind("PhoneNumbers")] PersonSubmitViewModel person)
+        {
+            person.PhoneNumbers.Add(new PhoneNumViewModel());
+            return PartialView("PhoneNumbers", person);
+        }
+
+        [HttpPost]
+        // Binding an address to our person and returning our partial view
+        public async Task<IActionResult> AddAddress([Bind("Addresses")] PersonSubmitViewModel person)
+        {
+            person.Addresses.Add(new AddressViewModel());
+            return PartialView("Addresses", person);
+        }
     }
 }

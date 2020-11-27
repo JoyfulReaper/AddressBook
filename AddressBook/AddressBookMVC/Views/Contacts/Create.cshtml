@@ -28,7 +28,28 @@
             </div>
             <div class="row">
                 <div class="col-md-4">
-                    <input class="btn btn-default" type="button" id="btnAdd" value="Add E-mail Address" />
+                    <input class="btn btn-default" type="button" id="addEmail" value="Add E-mail Address" />
+                </div>
+            </div>
+            <div id="phoneNumbersContainer" class="form-group">
+                @Html.EditorFor(model => model.PhoneNumbers, new { @class = "form-control" })
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <input class="btn btn-default" type="button" id="addPhoneNum" value="Add Phone Number" />
+                </div>
+            </div>
+
+            <div id="addressesContainer" class="form-group">
+                @Html.EditorFor(model => model.Addresses, new { @class = "form-control" })
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <input class="btn btn-default" type="button" id="addAddress" value="Add Address" />
                 </div>
             </div>
 
@@ -47,7 +68,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
-        $('#btnAdd').click(function () {
+        $('#addEmail').click(function () {
             $.ajax({
                 async: true,
                 data: $('#form').serialize(),
@@ -56,6 +77,36 @@
                 success: function (partialView) {
                     console.log("partialView: " + partialView);
                     $('#emailsContainer').html(partialView);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $('#addPhoneNum').click(function () {
+            $.ajax({
+                async: true,
+                data: $('#form').serialize(),
+                type: "POST",
+                url: "@Url.Action("AddPhoneNumber", "Contacts")",
+                success: function (partialView) {
+                    console.log("partialView: " + partialView);
+                    $('#phoneNumbersContainer').html(partialView);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $('#addAddress').click(function () {
+            $.ajax({
+                async: true,
+                data: $('#form').serialize(),
+                type: "POST",
+                url: "@Url.Action("AddAddress", "Contacts")",
+                success: function (partialView) {
+                    console.log("partialView: " + partialView);
+                    $('#addressesContainer').html(partialView);
                 }
             });
         });
