@@ -12,11 +12,10 @@ namespace AddressBookMVC.Models.ViewModels
 {
     public class PersonSubmitViewModel
     {
-        [Required]
+        [DisplayName("First Name")]
         public string FirstName { get; set; }
-        [Required]
+        [DisplayName("Last Name")]
         public string LastName { get; set; }
-
         [DisplayName("Email Addresses")]
         public List<EmailViewModel> EmailAddresses { get; set; } = new List<EmailViewModel>();
     }

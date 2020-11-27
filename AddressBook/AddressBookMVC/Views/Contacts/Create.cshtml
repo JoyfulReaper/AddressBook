@@ -22,7 +22,7 @@
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
-            <div id="emailsContainer">
+            <div id="emailsContainer" class="form-group">
                 @Html.EditorFor(model => model.EmailAddresses, new { @class = "form-control" })
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             </div>
@@ -45,7 +45,7 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    
+
     <script>
         $('#btnAdd').click(function () {
             $.ajax({
