@@ -82,7 +82,7 @@ namespace AddressBookMVC.Controllers
             };
         }
 
-        
+
 
         public IActionResult Create()
         {
@@ -93,25 +93,29 @@ namespace AddressBookMVC.Controllers
             return View(personSubmitVM);
         }
 
-       
+
 
         [ActionName("CreatePerson")]
         public IActionResult Create([Bind("FirstName, LastName, EmailAddresses, PhoneNumbers, Addresses")] PersonSubmitViewModel person)
         {
-            Person tempPerson = new Person()
+            if (ModelState.IsValid)
             {
-                FirstName = person.FirstName,
-                LastName = person.LastName,
-                EmailAddresses = person.EmailAddresses
-                    .Select(e => new Email { EmailAddress = e.Email}).ToList(), // to be refactored
-                PhoneNumbers = person.PhoneNumbers
-                .Select(e => new PhoneNum { Number = e.Number}).ToList(),
-                Addresses = person.Addresses
+                Person tempPerson = new Person()
+                {
+                    FirstName = person.FirstName,
+                    LastName = person.LastName,
+                    EmailAddresses = person.EmailAddresses
+                    .Select(e => new Email { EmailAddress = e.Email, IsPrimary = e.IsPrimary }).ToList(), // to be refactored
+                    PhoneNumbers = person.PhoneNumbers
+                .Select(e => new PhoneNum { Number = e.Number }).ToList(),
+                    Addresses = person.Addresses
                 .Select(e => new Address { StreetAddress = e.StreetAddress }).ToList()
-            };
+                };
 
-            db.CreatePerson(tempPerson);
-            return RedirectToAction("Index");
+                db.CreatePerson(tempPerson);
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Create");
         }
 
         [HttpPost]

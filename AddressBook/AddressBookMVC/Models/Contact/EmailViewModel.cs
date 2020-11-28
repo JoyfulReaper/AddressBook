@@ -9,12 +9,12 @@ namespace AddressBookMVC.Models.Contact
 {
     public class EmailViewModel
     {
-        [MinimumElements(1)]
+        //[MinimumElements(1)]
+        [Required]
         [DataType(DataType.EmailAddress)]
         [DisplayName("E-mail Address")]
         public string Email { get; set; }
         [DisplayName("Primary E-mail Address")]
         public bool IsPrimary { get; set; }
-        public int PersonId { get; set; }
     }
 }
