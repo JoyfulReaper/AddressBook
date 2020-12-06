@@ -1,0 +1,13 @@
+CREATE TABLE "Addresses" (
+	"Id"	INTEGER NOT NULL UNIQUE,
+	"PersonId"	INTEGER NOT NULL,
+	"StreetAddress"	TEXT NOT NULL,
+	"City"	TEXT NOT NULL,
+	"Suburb"	TEXT NOT NULL,
+	"State"	TEXT NOT NULL,
+	"PostCode"	TEXT NOT NULL,
+	"IsMailAddress"	INTEGER NOT NULL CHECK("IsMailAddress" IN (0, 1)),
+	"IsPrimary"	INTEGER NOT NULL CHECK("IsPrimary" IN (0, 1)),
+	PRIMARY KEY("Id" AUTOINCREMENT),
+	FOREIGN KEY("PersonId") REFERENCES "People"("Id") ON DELETE CASCADE
+)
