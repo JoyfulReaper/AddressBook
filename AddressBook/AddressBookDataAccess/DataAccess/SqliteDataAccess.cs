@@ -30,14 +30,14 @@ namespace AddressBookDataAccess.DataAccess
             }
         }
 
-        public T LoadResultSets<T, U>(string sqlStatements, U parameters, string connectionString)
+        public List<T> LoadResultSets<T, U>(string sqlStatements, U parameters, string connectionString)
         {
             using (IDbConnection connection = new SQLiteConnection(connectionString))
             {
                 var resultSet = connection.QueryMultiple(
                     sqlStatements, parameters);
 
-                var baseObject = resultSet.ReadSingle<T>(); // object to be populated
+                var baseObject = resultSet.Read<T>(); // object to be populated
 
                 Dictionary<string, Type> propTypeLists = new Dictionary<string, Type>();
 
@@ -62,11 +62,16 @@ namespace AddressBookDataAccess.DataAccess
                     reader = reader.MakeGenericMethod(type.Value);
 
                     var items = reader.Invoke(resultSet, new object[] { true });
-                    var objectProperty = baseObject.GetType().GetProperty(type.Key);
-                    objectProperty.SetValue(baseObject, items);
+                    var objectProperty = baseObject.FirstOrDefault().GetType().GetProperty(type.Key);
+
+                    foreach (var obj in baseObject)
+                    {
+                        objectProperty.SetValue(obj, items);
+                    }
+                    
                 }
 
-                return baseObject;
+                return baseObject.ToList();
             }
         }
 

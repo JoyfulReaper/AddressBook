@@ -108,7 +108,8 @@ namespace AddressBookDataAccess.DataAccess
             var person = db.LoadResultSets<Person, dynamic>(
                 queryList.ToString(),
                 new { Id = @id },
-                connectionString);
+                connectionString)
+                .FirstOrDefault();
 
             return person;
         }

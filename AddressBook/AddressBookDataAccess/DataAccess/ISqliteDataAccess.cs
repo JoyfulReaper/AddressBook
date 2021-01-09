@@ -6,7 +6,7 @@ namespace AddressBookDataAccess.DataAccess
     {
         List<T> LoadData<T, U>(string sqlStatement, U parameters, string connectionString);
         void SaveData<T>(string sqlStatement, T parameters, string connectionString);
-        T LoadResultSets<T, U>(string sqlStatements, U parameters, string connectionString);
+        List<T> LoadResultSets<T, U>(string sqlStatements, U parameters, string connectionString);
 
         void RollbackTransaction();
         List<T> LoadDataInTransaction<T, U>(string sqlStatement, U parameters);
