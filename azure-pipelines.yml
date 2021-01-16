@@ -21,8 +21,8 @@ steps:
       git config --global user.email "sflee36@yahoo.com.au"
       git config --global user.name "hboiled"
       git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
-      git remote add devops https://dev.azure.com/ProjectHubBuddies/_git/AddressBook
-      git push https://$(AzureDevOps.PAT)@https://dev.azure.com/ProjectHubBuddies/_git/AddressBook -u --all
+      git remote add devops https://$(AzureDevOps.PAT)@dev.azure.com/ProjectHubBuddies/_git/AddressBook
+      git push https://$(AzureDevOps.PAT)@dev.azure.com/ProjectHubBuddies/_git/AddressBook -u --all
 
 - task: NuGetCommand@2
   inputs:
