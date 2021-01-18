@@ -8,6 +8,7 @@ using AddressBookDataAccess.Models.People;
 using AddressBookMVC.Models.Contact;
 using AddressBookMVC.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using X.PagedList;
 
 namespace AddressBookMVC.Controllers
 {
@@ -20,11 +21,13 @@ namespace AddressBookMVC.Controllers
             this.db = db;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
             List<Person> people = db.GetPeople();
 
-            return View(people);
+            int pageSize = 4;
+            int pageNumber = (page ?? 1);
+            return View(people.ToPagedList(pageNumber, pageSize));
         }
 
         public IActionResult Details(int? id)

@@ -1,4 +1,6 @@
-﻿@model IEnumerable<AddressBookDataAccess.Models.People.Person>
+﻿@model X.PagedList.PagedList<AddressBookDataAccess.Models.People.Person>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
 
 @{
     ViewData["Title"] = "People";
@@ -10,7 +12,6 @@
 <p>
     <a class="removeLinkStyling" asp-action="Create">New Entry <i class="fas fa-plus-circle"></i></a>
 </p>
-
 @foreach (var item in Model)
 {
     <div class="row no-gutters">
@@ -36,3 +37,6 @@
         </div>
     </div>
 }
+
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
