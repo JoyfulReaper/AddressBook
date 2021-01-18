@@ -99,12 +99,17 @@ namespace AddressBookDataAccess.DataAccess
 
         public Person GetPersonById(int id)
         {
-            string sql = "SELECT * FROM People WHERE Id = @id";
+            StringBuilder queryList = new StringBuilder();
+            queryList.Append("SELECT * FROM People WHERE Id = @id;");
+            queryList.Append("SELECT EmailAddress, IsPrimary FROM EmailAddresses WHERE PersonId = @id;");
+            queryList.Append("SELECT StreetAddress, City, Suburb, State, PostCode, IsMailAddress, IsPrimary FROM Addresses WHERE PersonId = @id;");
+            queryList.Append("SELECT Number, IsPrimary FROM PhoneNumbers WHERE PersonId = @id;");
 
-            var person = db.LoadData<Person, dynamic>(
-                sql,
+            var person = db.LoadResultSets<Person, dynamic>(
+                queryList.ToString(),
                 new { Id = @id },
-                connectionString).FirstOrDefault();
+                connectionString)
+                .FirstOrDefault();
 
             return person;
         }

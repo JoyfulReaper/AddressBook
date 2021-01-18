@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using static Dapper.SqlMapper;
 
 namespace AddressBookDataAccess.DataAccess
 {
@@ -25,6 +27,51 @@ namespace AddressBookDataAccess.DataAccess
             using (IDbConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Execute(sqlStatement, parameters);
+            }
+        }
+
+        public List<T> LoadResultSets<T, U>(string sqlStatements, U parameters, string connectionString)
+        {
+            using (IDbConnection connection = new SQLiteConnection(connectionString))
+            {
+                var resultSet = connection.QueryMultiple(
+                    sqlStatements, parameters);
+
+                var baseObject = resultSet.Read<T>(); // object to be populated
+
+                Dictionary<string, Type> propTypeLists = new Dictionary<string, Type>();
+
+                // get all list properties from type T
+                foreach (var prop in typeof(T).GetProperties())
+                {
+                    var type = prop.PropertyType;
+
+                    if (type.IsGenericType && 
+                        type.GetGenericTypeDefinition() == typeof(List<>))
+                    {
+                        propTypeLists.Add(prop.Name, type.GetGenericArguments()[0]);
+                    }
+                }
+
+                foreach (var type in propTypeLists)
+                {
+
+                    var reader = typeof(GridReader).GetMethods()
+                        .Where(x => x.Name == "Read")
+                        .FirstOrDefault(x => x.IsGenericMethod);
+                    reader = reader.MakeGenericMethod(type.Value);
+
+                    var items = reader.Invoke(resultSet, new object[] { true });
+                    var objectProperty = baseObject.FirstOrDefault().GetType().GetProperty(type.Key);
+
+                    foreach (var obj in baseObject)
+                    {
+                        objectProperty.SetValue(obj, items);
+                    }
+                    
+                }
+
+                return baseObject.ToList();
             }
         }
 
@@ -53,7 +100,7 @@ namespace AddressBookDataAccess.DataAccess
         {
             List<T> rows = connection.Query<T>(sqlStatement, parameters, transaction: transaction)
                 .ToList();
-                
+
             return rows;
         }
 

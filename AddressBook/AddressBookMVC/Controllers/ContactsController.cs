@@ -37,7 +37,7 @@ namespace AddressBookMVC.Controllers
             // to be replaced by a proper PersonDetailVM
             Person personDetails = db.GetPersonById(id.Value);
 
-            GeneratePlaceholderValues(personDetails);
+            //GeneratePlaceholderValues(personDetails);
             PersonDetailViewModel personVM = MapToPersonDetailVM(personDetails);
 
             if (personDetails == null)
