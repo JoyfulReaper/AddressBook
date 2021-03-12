@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Threading.Tasks;
 using AddressBookDataAccess.DataAccess;
@@ -29,6 +30,11 @@ namespace AddressBookMVC
             services.AddScoped<IAddressRepository>(r => new AddressRepository(
                 Configuration.GetConnectionString("AddressBook"), new SqliteDataAccess()
                 ));
+
+            // To fix later
+            // First arg to be replaced
+            SQLiteCommand.Execute("Sql to be executed", SQLiteExecuteType.NonQuery,
+                Configuration.GetConnectionString("AddressBook"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
