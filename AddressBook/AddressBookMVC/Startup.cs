@@ -33,9 +33,45 @@ namespace AddressBookMVC
 
             // To fix later
             // First arg to be replaced
-            SQLiteCommand.Execute("Sql to be executed", SQLiteExecuteType.NonQuery,
-                Configuration.GetConnectionString("AddressBook"));
-        }
+
+            SQLiteCommand.Execute(@"CREATE TABLE IF NOT EXISTS [People] (
+  [Id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+, [FirstName] text NOT NULL
+, [LastName] text NOT NULL
+); CREATE UNIQUE INDEX[People_sqlite_autoindex_People_1] ON[People]([Id] ASC);
+
+CREATE TABLE [PhoneNumbers] (
+  [Id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+, [PersonId] bigint NOT NULL
+, [Number] bigint NOT NULL
+, [IsPrimary] bigint NOT NULL
+, CONSTRAINT [FK_PhoneNumbers_0_0] FOREIGN KEY ([PersonId]) REFERENCES [People] ([Id]) ON DELETE CASCADE ON UPDATE NO ACTION
+);
+CREATE UNIQUE INDEX [PhoneNumbers_sqlite_autoindex_PhoneNumbers_1] ON [PhoneNumbers] ([Id] ASC);
+
+CREATE TABLE [EmailAddresses] (
+  [Id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+, [PersonId] bigint NOT NULL
+, [EmailAddress] text NOT NULL
+, [IsPrimary] bigint NOT NULL
+, CONSTRAINT [FK_EmailAddresses_0_0] FOREIGN KEY ([PersonId]) REFERENCES [People] ([Id]) ON DELETE CASCADE ON UPDATE NO ACTION
+);
+CREATE UNIQUE INDEX [EmailAddresses_sqlite_autoindex_EmailAddresses_1] ON [EmailAddresses] ([Id] ASC);
+
+CREATE TABLE [Addresses] (
+  [Id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+, [PersonId] bigint NOT NULL
+, [StreetAddress] text NOT NULL
+, [City] text NOT NULL
+, [Suburb] text NOT NULL
+, [State] text NOT NULL
+, [PostCode] text NOT NULL
+, [IsMailAddress] bigint NOT NULL
+, [IsPrimary] bigint NOT NULL
+, CONSTRAINT [FK_Addresses_0_0] FOREIGN KEY ([PersonId]) REFERENCES [People] ([Id]) ON DELETE CASCADE ON UPDATE NO ACTION
+);
+CREATE UNIQUE INDEX [Addresses_sqlite_autoindex_Addresses_1] ON [Addresses] ([Id] ASC);", SQLiteExecuteType.NonQuery, Configuration.GetConnectionString("AddressBook"));
+}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

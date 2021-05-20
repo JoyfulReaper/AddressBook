@@ -12,10 +12,4 @@
     <ProjectReference Include="..\AddressBookDataAccess\AddressBookDataAccess.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="AddressBook.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
